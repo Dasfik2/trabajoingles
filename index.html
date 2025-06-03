@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekly School Menu - Canva Template</title>
+    <title>Weekly School Menu | Héctor & Jorge</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍴</text></svg>">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Dancing+Script:wght@400;700&display=swap');
         
         * {
             margin: 0;
@@ -15,289 +16,583 @@
         
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f5f5f5;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background Elements */
+        .bg-decoration {
+            position: fixed;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .bg-decoration:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            font-size: 4rem;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .bg-decoration:nth-child(2) {
+            top: 20%;
+            right: 10%;
+            font-size: 3rem;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+        
+        .bg-decoration:nth-child(3) {
+            bottom: 20%;
+            left: 10%;
+            font-size: 3.5rem;
+            animation: float 7s ease-in-out infinite;
+        }
+        
+        .bg-decoration:nth-child(4) {
+            bottom: 10%;
+            right: 5%;
+            font-size: 2.5rem;
+            animation: float 5s ease-in-out infinite reverse;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .main-container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             padding: 20px;
         }
         
-        .canva-template {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
+        .menu-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.2);
         }
         
-        /* HEADER SECTION */
         .header {
-            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
             color: white;
+            padding: 50px 30px;
             text-align: center;
-            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: backgroundMove 20s linear infinite;
+        }
+        
+        @keyframes backgroundMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(20px, 20px); }
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .author-credit {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            font-weight: 300;
+            letter-spacing: 1px;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
         }
         
         .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
+            font-size: 1.3rem;
+            opacity: 0.95;
+            font-weight: 400;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
         }
         
-        /* DAYS GRID */
-        .days-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 0;
+        .days-container {
+            padding: 50px 40px;
+            background: linear-gradient(180deg, rgba(248,249,255,0.8) 0%, rgba(255,255,255,0.9) 100%);
         }
         
-        .day-block {
-            border-bottom: 2px solid #f0f0f0;
-            padding: 30px;
-        }
-        
-        .day-block:nth-child(odd) {
-            background: #fafafa;
-        }
-        
-        .day-title {
-            background: #2C3E50;
-            color: white;
-            padding: 12px 20px;
+        .day-card {
+            background: rgba(255,255,255,0.9);
             border-radius: 25px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 1.2rem;
-            margin-bottom: 25px;
+            margin-bottom: 35px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .day-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24, #6c5ce7);
+            background-size: 400% 400%;
+            animation: gradientShift 10s ease infinite;
+            z-index: -1;
+            border-radius: 25px;
+            padding: 2px;
+        }
+        
+        .day-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+        
+        .day-header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 20px 30px;
+            font-weight: 700;
+            font-size: 1.4rem;
             text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
         }
         
-        /* Color variations for days */
-        .day-block:nth-child(1) .day-title { background: #E74C3C; }
-        .day-block:nth-child(2) .day-title { background: #3498DB; }
-        .day-block:nth-child(3) .day-title { background: #2ECC71; }
-        .day-block:nth-child(4) .day-title { background: #F39C12; }
-        .day-block:nth-child(5) .day-title { background: #9B59B6; }
-        
-        /* MEALS LAYOUT */
-        .meals-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        .day-header::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
         }
         
-        .meal-row {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        @keyframes pulse {
+            0%, 100% { transform: translateY(-50%) scale(1); opacity: 0.5; }
+            50% { transform: translateY(-50%) scale(1.1); opacity: 0.8; }
+        }
+        
+        .meals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 35px;
+        }
+        
+        .meal {
+            text-align: center;
+            background: rgba(255,255,255,0.7);
+            padding: 25px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .meal:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            background: rgba(255,255,255,0.9);
         }
         
         .meal-icon {
-            width: 50px;
-            height: 50px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            margin: 0 auto 20px;
+            font-size: 2rem;
             color: white;
-            flex-shrink: 0;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
         
-        .breakfast-icon { background: #FF9500; }
-        .snack-icon { background: #00CED1; }
-        .lunch-icon { background: #32CD32; }
-        
-        .meal-info {
-            flex: 1;
+        .meal-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
         }
         
-        .meal-name {
-            font-weight: 600;
-            color: #2C3E50;
-            margin-bottom: 5px;
+        .meal:hover .meal-icon::before {
+            animation: shine 0.6s ease;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .breakfast .meal-icon { 
+            background: linear-gradient(135deg, #ffa726, #ff7043, #ff5722);
+            box-shadow: 0 8px 25px rgba(255, 167, 38, 0.4);
+        }
+        .snack .meal-icon { 
+            background: linear-gradient(135deg, #26c6da, #00acc1, #0097a7);
+            box-shadow: 0 8px 25px rgba(38, 198, 218, 0.4);
+        }
+        .lunch .meal-icon { 
+            background: linear-gradient(135deg, #66bb6a, #43a047, #388e3c);
+            box-shadow: 0 8px 25px rgba(102, 187, 106, 0.4);
+        }
+        
+        .meal-title {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
             text-transform: uppercase;
-            font-size: 0.9rem;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
-        .meal-items {
+        .meal-content {
             color: #555;
-            line-height: 1.4;
+            line-height: 1.8;
             font-size: 0.95rem;
+            font-weight: 400;
         }
         
-        /* FOOTER */
         .footer {
-            background: #2C3E50;
+            background: linear-gradient(135deg, #2c3e50, #34495e, #2c3e50);
             color: white;
             text-align: center;
-            padding: 20px;
-            font-size: 0.9rem;
+            padding: 30px;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
         }
         
-
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: footerShine 3s ease-in-out infinite;
+        }
         
+        @keyframes footerShine {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+        
+        .footer-content {
+            position: relative;
+            z-index: 2;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Sparkle Animation */
+        .sparkle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+        
+        /* Responsive Design */
         @media (max-width: 768px) {
+            .header h1 { font-size: 2.5rem; }
+            .meals-grid { 
+                grid-template-columns: 1fr; 
+                padding: 25px;
+            }
+            .days-container { padding: 30px 20px; }
+            .day-card { margin-bottom: 25px; }
+        }
+        
+        @media (max-width: 480px) {
             .header h1 { font-size: 2rem; }
-            .days-grid { grid-template-columns: 1fr; }
-            .meal-row { flex-direction: column; text-align: center; }
+            .header { padding: 30px 20px; }
+            .author-credit { font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
-    <div class="canva-template">
-        <div class="header">
-            <p style="font-size: 0.9rem; margin-bottom: 15px; opacity: 0.8;">Made by: Héctor and Jorge</p>
-            <h1>WEEKLY SCHOOL MENU</h1>
-            <p>Nutritious & Delicious Meals</p>
-        </div>
-        
-        <div class="days-grid">
-            <div class="day-block">
-                <div class="day-title">MONDAY</div>
-                <div class="meals-container">
-                    <div class="meal-row">
-                        <div class="meal-icon breakfast-icon">🌅</div>
-                        <div class="meal-info">
-                            <div class="meal-name">BREAKFAST</div>
-                            <div class="meal-items">Whole grain cereal • Fresh milk • Banana slices</div>
+    <!-- Animated Background Decorations -->
+    <div class="bg-decoration">🍎</div>
+    <div class="bg-decoration">🥐</div>
+    <div class="bg-decoration">🥗</div>
+    <div class="bg-decoration">🧃</div>
+    
+    <div class="main-container">
+        <div class="menu-container">
+            <div class="header">
+                <div class="header-content">
+                    <div class="author-credit">✨ Made by: Héctor and Jorge ✨</div>
+                    <h1>WEEKLY SCHOOL MENU</h1>
+                    <p>Nutritious & Delicious Meals English Final Task</p>
+                </div>
+            </div>
+            
+            <div class="days-container">
+                <div class="day-card">
+                    <div class="day-header">
+                        Monday
+                        <div class="sparkle" style="top: 20%; left: 80%; width: 4px; height: 4px; animation-delay: 0s;"></div>
+                    </div>
+                    <div class="meals-grid">
+                        <div class="meal breakfast">
+                            <div class="meal-icon">🌅</div>
+                            <div class="meal-title">Breakfast</div>
+                            <div class="meal-content">
+                                Whole grain cereal with fresh milk<br>
+                                Sliced banana<br>
+                                Orange juice
+                            </div>
+                        </div>
+                        <div class="meal snack">
+                            <div class="meal-icon">🍎</div>
+                            <div class="meal-title">Morning Snack</div>
+                            <div class="meal-content">
+                                Apple slices with<br>
+                                peanut butter<br>
+                                Water
+                            </div>
+                        </div>
+                        <div class="meal lunch">
+                            <div class="meal-icon">🍽️</div>
+                            <div class="meal-title">Lunch</div>
+                            <div class="meal-content">
+                                Grilled chicken breast<br>
+                                Steamed broccoli<br>
+                                Brown rice<br>
+                                Chocolate milk
+                            </div>
                         </div>
                     </div>
-                    <div class="meal-row">
-                        <div class="meal-icon snack-icon">🍎</div>
-                        <div class="meal-info">
-                            <div class="meal-name">MORNING SNACK</div>
-                            <div class="meal-items">Apple slices with peanut butter</div>
+                </div>
+                
+                <div class="day-card">
+                    <div class="day-header">
+                        Tuesday
+                        <div class="sparkle" style="top: 30%; left: 85%; width: 3px; height: 3px; animation-delay: 0.5s;"></div>
+                    </div>
+                    <div class="meals-grid">
+                        <div class="meal breakfast">
+                            <div class="meal-icon">🥞</div>
+                            <div class="meal-title">Breakfast</div>
+                            <div class="meal-content">
+                                Pancakes with maple syrup<br>
+                                Fresh strawberries<br>
+                                Low-fat milk
+                            </div>
+                        </div>
+                        <div class="meal snack">
+                            <div class="meal-icon">🥨</div>
+                            <div class="meal-title">Morning Snack</div>
+                            <div class="meal-content">
+                                Whole wheat crackers<br>
+                                Cheese cubes<br>
+                                Grape juice
+                            </div>
+                        </div>
+                        <div class="meal lunch">
+                            <div class="meal-icon">🌮</div>
+                            <div class="meal-title">Lunch</div>
+                            <div class="meal-content">
+                                Fish tacos with lettuce<br>
+                                Black bean salad<br>
+                                Corn tortillas<br>
+                                Fresh lemonade
+                            </div>
                         </div>
                     </div>
-                    <div class="meal-row">
-                        <div class="meal-icon lunch-icon">🍽️</div>
-                        <div class="meal-info">
-                            <div class="meal-name">LUNCH</div>
-                            <div class="meal-items">Grilled chicken • Steamed broccoli • Brown rice</div>
+                </div>
+                
+                <div class="day-card">
+                    <div class="day-header">
+                        Wednesday
+                        <div class="sparkle" style="top: 25%; left: 75%; width: 5px; height: 5px; animation-delay: 1s;"></div>
+                    </div>
+                    <div class="meals-grid">
+                        <div class="meal breakfast">
+                            <div class="meal-icon">🍳</div>
+                            <div class="meal-title">Breakfast</div>
+                            <div class="meal-content">
+                                Scrambled eggs<br>
+                                Whole grain toast<br>
+                                Fresh orange slices<br>
+                                Apple juice
+                            </div>
+                        </div>
+                        <div class="meal snack">
+                            <div class="meal-icon">🥕</div>
+                            <div class="meal-title">Morning Snack</div>
+                            <div class="meal-content">
+                                Carrot sticks with<br>
+                                hummus dip<br>
+                                Water
+                            </div>
+                        </div>
+                        <div class="meal lunch">
+                            <div class="meal-icon">🍝</div>
+                            <div class="meal-title">Lunch</div>
+                            <div class="meal-content">
+                                Spaghetti with marinara<br>
+                                Garlic breadsticks<br>
+                                Mixed green salad<br>
+                                Milk
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="day-card">
+                    <div class="day-header">
+                        Thursday
+                        <div class="sparkle" style="top: 35%; left: 90%; width: 4px; height: 4px; animation-delay: 1.5s;"></div>
+                    </div>
+                    <div class="meals-grid">
+                        <div class="meal breakfast">
+                            <div class="meal-icon">🥣</div>
+                            <div class="meal-title">Breakfast</div>
+                            <div class="meal-content">
+                                Oatmeal with blueberries<br>
+                                Honey drizzle<br>
+                                Low-fat milk
+                            </div>
+                        </div>
+                        <div class="meal snack">
+                            <div class="meal-icon">🍌</div>
+                            <div class="meal-title">Morning Snack</div>
+                            <div class="meal-content">
+                                Banana smoothie<br>
+                                Granola bar<br>
+                                Water
+                            </div>
+                        </div>
+                        <div class="meal lunch">
+                            <div class="meal-icon">🍕</div>
+                            <div class="meal-title">Lunch</div>
+                            <div class="meal-content">
+                                Vegetable pizza slice<br>
+                                Caesar salad<br>
+                                Fresh fruit cup<br>
+                                Chocolate milk
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="day-card">
+                    <div class="day-header">
+                        Friday
+                        <div class="sparkle" style="top: 40%; left: 70%; width: 3px; height: 3px; animation-delay: 2s;"></div>
+                    </div>
+                    <div class="meals-grid">
+                        <div class="meal breakfast">
+                            <div class="meal-icon">🧇</div>
+                            <div class="meal-title">Breakfast</div>
+                            <div class="meal-content">
+                                Belgian waffles<br>
+                                Fresh berries<br>
+                                Whipped cream<br>
+                                Orange juice
+                            </div>
+                        </div>
+                        <div class="meal snack">
+                            <div class="meal-icon">🍪</div>
+                            <div class="meal-title">Morning Snack</div>
+                            <div class="meal-content">
+                                Homemade cookies<br>
+                                Milk<br>
+                                Grapes
+                            </div>
+                        </div>
+                        <div class="meal lunch">
+                            <div class="meal-icon">🍔</div>
+                            <div class="meal-title">Lunch</div>
+                            <div class="meal-content">
+                                Turkey burger<br>
+                                Sweet potato fries<br>
+                                Coleslaw<br>
+                                Fresh lemonade
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="day-block">
-                <div class="day-title">TUESDAY</div>
-                <div class="meals-container">
-                    <div class="meal-row">
-                        <div class="meal-icon breakfast-icon">🥞</div>
-                        <div class="meal-info">
-                            <div class="meal-name">BREAKFAST</div>
-                            <div class="meal-items">Pancakes with syrup • Fresh strawberries</div>
-                        </div>
-                    </div>
-                    <div class="meal-row">
-                        <div class="meal-icon snack-icon">🥨</div>
-                        <div class="meal-info">
-                            <div class="meal-name">MORNING SNACK</div>
-                            <div class="meal-items">Crackers with cheese cubes</div>
-                        </div>
-                    </div>
-                    <div class="meal-row">
-                        <div class="meal-icon lunch-icon">🌮</div>
-                        <div class="meal-info">
-                            <div class="meal-name">LUNCH</div>
-                            <div class="meal-items">Fish tacos • Black bean salad • Corn tortillas</div>
-                        </div>
-                    </div>
+            <div class="footer">
+                <div class="footer-content">
+                    🌟 Presentation made by Jorge and Héctor | Webpage made by Héctor 🌟
                 </div>
             </div>
-            
-            <div class="day-block">
-                <div class="day-title">WEDNESDAY</div>
-                <div class="meals-container">
-                    <div class="meal-row">
-                        <div class="meal-icon breakfast-icon">🍳</div>
-                        <div class="meal-info">
-                            <div class="meal-name">BREAKFAST</div>
-                            <div class="meal-items">Scrambled eggs • Whole grain toast • Orange</div>
-                        </div>
-                    </div>
-                    <div class="meal-row">
-                        <div class="meal-icon snack-icon">🥕</div>
-                        <div class="meal-info">
-                            <div class="meal-name">MORNING SNACK</div>
-                            <div class="meal-items">Carrot sticks with hummus</div>
-                        </div>
-                    </div>
-                    <div class="meal-row">
-                        <div class="meal-icon lunch-icon">🍝</div>
-                        <div class="meal-info">
-                            <div class="meal-name">LUNCH</div>
-                            <div class="meal-items">Spaghetti marinara • Garlic bread • Green salad</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="day-block">
-                <div class="day-title">THURSDAY</div>
-                <div class="meals-container">
-                    <div class="meal-row">
-                        <div class="meal-icon breakfast-icon">🥣</div>
-                        <div class="meal-info">
-                            <div class="meal-name">BREAKFAST</div>
-                            <div class="meal-items">Oatmeal with blueberries • Honey</div>
-                        </div>
-                    </div>
-                    <div class="meal-row">
-                        <div class="meal-icon snack-icon">🍌</div>
-                        <div class="meal-info">
-                            <div class="meal-name">MORNING SNACK</div>
-                            <div class="meal-items">Banana smoothie • Granola bar</div>
-                        </div>
-                    </div>
-                    <div class="meal-row">
-                        <div class="meal-icon lunch-icon">🍕</div>
-                        <div class="meal-info">
-                            <div class="meal-name">LUNCH</div>
-                            <div class="meal-items">Vegetable pizza • Caesar salad • Fruit cup</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="day-block">
-                <div class="day-title">FRIDAY</div>
-                <div class="meals-container">
-                    <div class="meal-row">
-                        <div class="meal-icon breakfast-icon">🧇</div>
-                        <div class="meal-info">
-                            <div class="meal-name">BREAKFAST</div>
-                            <div class="meal-items">Belgian waffles • Fresh berries • Cream</div>
-                        </div>
-                    </div>
-                    <div class="meal-row">
-                        <div class="meal-icon snack-icon">🍪</div>
-                        <div class="meal-info">
-                            <div class="meal-name">MORNING SNACK</div>
-                            <div class="meal-items">Homemade cookies • Milk</div>
-                        </div>
-                    </div>
-                    <div class="meal-row">
-                        <div class="meal-icon lunch-icon">🍔</div>
-                        <div class="meal-info">
-                            <div class="meal-name">LUNCH</div>
-                            <div class="meal-items">Turkey burger • Sweet potato fries • Coleslaw</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="footer">
-            Fresh, locally sourced ingredients | Nutritionally balanced meals
         </div>
     </div>
 </body>
