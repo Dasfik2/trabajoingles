@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly School Menu - Canva Template</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .canva-template {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        /* HEADER SECTION */
+        .header {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        /* DAYS GRID */
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 0;
+        }
+        
+        .day-block {
+            border-bottom: 2px solid #f0f0f0;
+            padding: 30px;
+        }
+        
+        .day-block:nth-child(odd) {
+            background: #fafafa;
+        }
+        
+        .day-title {
+            background: #2C3E50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+        
+        /* Color variations for days */
+        .day-block:nth-child(1) .day-title { background: #E74C3C; }
+        .day-block:nth-child(2) .day-title { background: #3498DB; }
+        .day-block:nth-child(3) .day-title { background: #2ECC71; }
+        .day-block:nth-child(4) .day-title { background: #F39C12; }
+        .day-block:nth-child(5) .day-title { background: #9B59B6; }
+        
+        /* MEALS LAYOUT */
+        .meals-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .meal-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .meal-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .breakfast-icon { background: #FF9500; }
+        .snack-icon { background: #00CED1; }
+        .lunch-icon { background: #32CD32; }
+        
+        .meal-info {
+            flex: 1;
+        }
+        
+        .meal-name {
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        
+        .meal-items {
+            color: #555;
+            line-height: 1.4;
+            font-size: 0.95rem;
+        }
+        
+        /* FOOTER */
+        .footer {
+            background: #2C3E50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+        
+
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .days-grid { grid-template-columns: 1fr; }
+            .meal-row { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="canva-template">
+        <div class="header">
+            <p style="font-size: 0.9rem; margin-bottom: 15px; opacity: 0.8;">Made by: Héctor and Jorge</p>
+            <h1>WEEKLY SCHOOL MENU</h1>
+            <p>Nutritious & Delicious Meals</p>
+        </div>
+        
+        <div class="days-grid">
+            <div class="day-block">
+                <div class="day-title">MONDAY</div>
+                <div class="meals-container">
+                    <div class="meal-row">
+                        <div class="meal-icon breakfast-icon">🌅</div>
+                        <div class="meal-info">
+                            <div class="meal-name">BREAKFAST</div>
+                            <div class="meal-items">Whole grain cereal • Fresh milk • Banana slices</div>
+                        </div>
+                    </div>
+                    <div class="meal-row">
+                        <div class="meal-icon snack-icon">🍎</div>
+                        <div class="meal-info">
+                            <div class="meal-name">MORNING SNACK</div>
+                            <div class="meal-items">Apple slices with peanut butter</div>
+                        </div>
+                    </div>
+                    <div class="meal-row">
+                        <div class="meal-icon lunch-icon">🍽️</div>
+                        <div class="meal-info">
+                            <div class="meal-name">LUNCH</div>
+                            <div class="meal-items">Grilled chicken • Steamed broccoli • Brown rice</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="day-block">
+                <div class="day-title">TUESDAY</div>
+                <div class="meals-container">
+                    <div class="meal-row">
+                        <div class="meal-icon breakfast-icon">🥞</div>
+                        <div class="meal-info">
+                            <div class="meal-name">BREAKFAST</div>
+                            <div class="meal-items">Pancakes with syrup • Fresh strawberries</div>
+                        </div>
+                    </div>
+                    <div class="meal-row">
+                        <div class="meal-icon snack-icon">🥨</div>
+                        <div class="meal-info">
+                            <div class="meal-name">MORNING SNACK</div>
+                            <div class="meal-items">Crackers with cheese cubes</div>
+                        </div>
+                    </div>
+                    <div class="meal-row">
+                        <div class="meal-icon lunch-icon">🌮</div>
+                        <div class="meal-info">
+                            <div class="meal-name">LUNCH</div>
+                            <div class="meal-items">Fish tacos • Black bean salad • Corn tortillas</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="day-block">
+                <div class="day-title">WEDNESDAY</div>
+                <div class="meals-container">
+                    <div class="meal-row">
+                        <div class="meal-icon breakfast-icon">🍳</div>
+                        <div class="meal-info">
+                            <div class="meal-name">BREAKFAST</div>
+                            <div class="meal-items">Scrambled eggs • Whole grain toast • Orange</div>
+                        </div>
+                    </div>
+                    <div class="meal-row">
+                        <div class="meal-icon snack-icon">🥕</div>
+                        <div class="meal-info">
+                            <div class="meal-name">MORNING SNACK</div>
+                            <div class="meal-items">Carrot sticks with hummus</div>
+                        </div>
+                    </div>
+                    <div class="meal-row">
+                        <div class="meal-icon lunch-icon">🍝</div>
+                        <div class="meal-info">
+                            <div class="meal-name">LUNCH</div>
+                            <div class="meal-items">Spaghetti marinara • Garlic bread • Green salad</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="day-block">
+                <div class="day-title">THURSDAY</div>
+                <div class="meals-container">
+                    <div class="meal-row">
+                        <div class="meal-icon breakfast-icon">🥣</div>
+                        <div class="meal-info">
+                            <div class="meal-name">BREAKFAST</div>
+                            <div class="meal-items">Oatmeal with blueberries • Honey</div>
+                        </div>
+                    </div>
+                    <div class="meal-row">
+                        <div class="meal-icon snack-icon">🍌</div>
+                        <div class="meal-info">
+                            <div class="meal-name">MORNING SNACK</div>
+                            <div class="meal-items">Banana smoothie • Granola bar</div>
+                        </div>
+                    </div>
+                    <div class="meal-row">
+                        <div class="meal-icon lunch-icon">🍕</div>
+                        <div class="meal-info">
+                            <div class="meal-name">LUNCH</div>
+                            <div class="meal-items">Vegetable pizza • Caesar salad • Fruit cup</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="day-block">
+                <div class="day-title">FRIDAY</div>
+                <div class="meals-container">
+                    <div class="meal-row">
+                        <div class="meal-icon breakfast-icon">🧇</div>
+                        <div class="meal-info">
+                            <div class="meal-name">BREAKFAST</div>
+                            <div class="meal-items">Belgian waffles • Fresh berries • Cream</div>
+                        </div>
+                    </div>
+                    <div class="meal-row">
+                        <div class="meal-icon snack-icon">🍪</div>
+                        <div class="meal-info">
+                            <div class="meal-name">MORNING SNACK</div>
+                            <div class="meal-items">Homemade cookies • Milk</div>
+                        </div>
+                    </div>
+                    <div class="meal-row">
+                        <div class="meal-icon lunch-icon">🍔</div>
+                        <div class="meal-info">
+                            <div class="meal-name">LUNCH</div>
+                            <div class="meal-items">Turkey burger • Sweet potato fries • Coleslaw</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Presentation made by Jorge and Héctor | All the webpage made by Héctor
+        </div>
+    </div>
+</body>
+</html>
