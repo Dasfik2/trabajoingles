@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Piece Fall - By Héctor</title>
+    <title>Piece Fall</title>
     <style>
         * {
             margin: 0;
@@ -47,11 +47,62 @@
             gap: 20px;
         }
 
-        .score-panel, .next-panel, .controls-panel {
+        .score-panel, .next-panel,         .controls-panel {
             background: rgba(0, 0, 0, 0.7);
             padding: 15px;
             border-radius: 10px;
             min-width: 200px;
+        }
+
+        .session-panel {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 200px;
+            border: 2px solid #4ecdc4;
+        }
+
+        .session-panel.logged-out {
+            border-color: #ff6b6b;
+        }
+
+        .session-status {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-online {
+            background: #4ecdc4;
+            box-shadow: 0 0 10px #4ecdc4;
+        }
+
+        .status-offline {
+            background: #ff6b6b;
+        }
+
+        .login-link {
+            display: inline-block;
+            background: #ffd700;
+            color: #000;
+            padding: 6px 12px;
+            text-decoration: none;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .login-link:hover {
+            background: #ffed4e;
+            transform: scale(1.05);
         }
 
         .score-panel h2, .next-panel h2, .controls-panel h2 {
@@ -242,6 +293,15 @@
                 <p>↓ Caída rápida</p>
                 <p>↑ Rotar</p>
                 <p>ESPACIO Pausa</p>
+            </div>
+
+            <div class="session-panel" id="sessionPanel">
+                <h2>SESIÓN</h2>
+                <div class="session-status">
+                    <span class="status-indicator" id="statusIndicator"></span>
+                    <span id="sessionText">Verificando...</span>
+                </div>
+                <div id="sessionInfo"></div>
             </div>
         </div>
     </div>
@@ -522,17 +582,17 @@
             }
             
             showGameOver() {
-    const gameOverDiv = document.createElement('div');
-    gameOverDiv.className = 'game-over';
-    gameOverDiv.innerHTML = `
-        <h1>¡JUEGO TERMINADO!</h1>
-        <p>Puntuación Final: ${this.score}</p>
-        <p>Líneas Completadas: ${this.lines}</p>
-        <p>Nivel Alcanzado: ${this.level}</p>
-        <button class="restart-btn" onclick="location.reload()">JUGAR DE NUEVO</button>
-    `;
-    document.body.appendChild(gameOverDiv);
-}
+                const gameOverDiv = document.createElement('div');
+                gameOverDiv.className = 'game-over';
+                gameOverDiv.innerHTML = `
+                    <h1>¡JUEGO TERMINADO!</h1>
+                    <p>Puntuación Final: ${this.score}</p>
+                    <p>Líneas Completadas: ${this.lines}</p>
+                    <p>Nivel Alcanzado: ${this.level}</p>
+                    <button class="restart-btn" onclick="location.reload()">JUGAR DE NUEVO</button>
+                `;
+                document.body.appendChild(gameOverDiv);
+            }
             
             setupEventListeners() {
                 document.addEventListener('keydown', (e) => {
@@ -586,9 +646,67 @@
             }
         }
         
+        // Verificar estado de sesión
+        function checkSessionStatus() {
+            let isLoggedIn = false;
+            let currentUser = null;
+
+            // Intentar obtener información de sesión del padre
+            try {
+                if (window.parent && window.parent.gameDatabase && window.parent.gameDatabase.currentSession) {
+                    isLoggedIn = true;
+                    currentUser = window.parent.gameDatabase.currentSession;
+                }
+            } catch (e) {
+                // Si no se puede acceder al padre, asumir que no hay sesión
+                console.log('No se pudo verificar la sesión');
+            }
+
+            const sessionPanel = document.getElementById('sessionPanel');
+            const statusIndicator = document.getElementById('statusIndicator');
+            const sessionText = document.getElementById('sessionText');
+            const sessionInfo = document.getElementById('sessionInfo');
+
+            if (isLoggedIn && currentUser) {
+                // Usuario logueado
+                sessionPanel.classList.remove('logged-out');
+                statusIndicator.classList.add('status-online');
+                statusIndicator.classList.remove('status-offline');
+                sessionText.textContent = 'Conectado';
+                sessionInfo.innerHTML = `
+                    <p style="font-size: 12px; text-align: center; margin: 8px 0;">
+                        🎮 ${currentUser.username}
+                    </p>
+                    <p style="font-size: 10px; text-align: center; color: #4ecdc4;">
+                        Puntuaciones se guardarán
+                    </p>
+                `;
+            } else {
+                // Usuario no logueado
+                sessionPanel.classList.add('logged-out');
+                statusIndicator.classList.add('status-offline');
+                statusIndicator.classList.remove('status-online');
+                sessionText.textContent = 'Desconectado';
+                sessionInfo.innerHTML = `
+                    <p style="font-size: 10px; text-align: center; margin: 8px 0; color: #ffd700;">
+                        Las puntuaciones no se guardarán
+                    </p>
+                    <div style="text-align: center;">
+                        <a href="https://dasfik2.github.io/trabajoingles/#cuenta" class="login-link">
+                            Iniciar Sesión
+                        </a>
+                    </div>
+                `;
+            }
+        }
+
         // Iniciar el juego
         window.addEventListener('load', () => {
             new PieceFall();
+            checkSessionStatus();
+            
+            // Verificar estado de sesión periódicamente
+            setInterval(checkSessionStatus, 2000);
         });
     </script>
 </body>
