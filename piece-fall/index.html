@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Piece Fall - Héctor</title>
+    <title>Piece Fall - By Héctor</title>
     <style>
         * {
             margin: 0;
@@ -129,6 +129,49 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
         }
 
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: #000;
+            border: 3px solid #fff;
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            background-image: 
+                linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%),
+                linear-gradient(-45deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%);
+        }
+
+        .back-btn:hover {
+            background: #333;
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .back-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 4px);
+            border-radius: 5px;
+        }
+
         @media (max-width: 768px) {
             .game-container {
                 flex-direction: column;
@@ -144,10 +187,26 @@
             .score-panel, .next-panel, .controls-panel {
                 min-width: 150px;
             }
+
+            .back-btn {
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .title {
+                top: 20px;
+                font-size: 28px;
+            }
         }
     </style>
 </head>
 <body>
+    <a href="https://dasfik2.github.io/trabajoingles/" class="back-btn">
+        ✕
+    </a>
     <h1 class="title">PIECE FALL</h1>
     
     <div class="game-container">
