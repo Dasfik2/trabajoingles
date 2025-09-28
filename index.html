@@ -1,202 +1,9 @@
-// Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Header background on scroll
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 50) {
-                header.style.background = 'rgba(0, 0, 0, 0.95)';
-            } else {
-                header.style.background = 'rgba(0, 0, 0, 0.9)';
-            }
-        });
-
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe all cards
-        document.querySelectorAll('.project-card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'all 0.6s ease';
-            observer.observe(card);
-        });        // Event Listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            // Profile tabs switching
-            document.querySelectorAll('.profile-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // Remove active class from all tabs and content
-                    document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
-                    document.querySelectorAll('.profile-content').forEach(c => c.classList.remove('active'));
-                    
-                    // Add active class to clicked tab and corresponding content
-                    this.classList.add('active');
-                    document.getElementById('profile' + this.dataset.profileTab.charAt(0).toUpperCase() + this.dataset.profileTab.slice(1)).classList.add('active');
-                });
-            });
-
-            // Auth tabs switching
-            document.querySelectorAll('.auth-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    switchTab(this.dataset.tab);
-                });
-            });
-
-            // Login form
-            document.getElementById('loginForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const username = document.getElementById('loginUsername').value.trim();
-                const password = document.getElementById('loginPassword').value;
-
-                if (!username || !password) {
-                    showMessage('loginMessages', 'Por favor, completa todos los campos.');
-                }
-
-                if (db.findUserByEmail(email)) {
-                    showMessage('registerMessages', 'Este email ya está registrado.');
-                    return;
-                }
-
-                const newUser = db.addUser(username, email, db.hashPassword(password));
-                showMessage('registerMessages', 'Registro exitoso! Puedes iniciar sesión ahora.', 'success');
-                
-                this.reset();
-                setTimeout(() => {
-                    switchTab('login');
-                }, 2000);
-            });
-
-            // Logout button
-            document.getElementById('logoutBtn').addEventListener('click', function() {
-                db.logout();
-                showAuthForms();
-                document.getElementById('loginForm').reset();
-                document.getElementById('registerForm').reset();
-            });
-
-            // Initialize leaderboard on page load
-            updateLeaderboard();
-        });
-
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Header background on scroll
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 50) {
-                header.style.background = 'rgba(0, 0, 0, 0.95)';
-            } else {
-                header.style.background = 'rgba(0, 0, 0, 0.9)';
-            }
-        });
-
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe all cards
-        document.querySelectorAll('.project-card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'all 0.6s ease';
-            observer.observe(card);
-        });
-                }
-
-                const user = db.authenticate(username, password);
-                if (user) {
-                    showMessage('loginMessages', 'Inicio de sesión exitoso!', 'success');
-                    setTimeout(() => {
-                        showUserPanel(user);
-                    }, 1500);
-                } else {
-                    showMessage('loginMessages', 'Usuario o contraseña incorrectos.');
-                }
-            });
-
-            // Register form
-            document.getElementById('registerForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const username = document.getElementById('regUsername').value.trim();
-                const email = document.getElementById('regEmail').value.trim();
-                const password = document.getElementById('regPassword').value;
-                const confirmPassword = document.getElementById('regConfirmPassword').value;
-
-                if (!username || !email || !password || !confirmPassword) {
-                    showMessage('registerMessages', 'Por favor, completa todos los campos.');
-                    return;
-                }
-
-                if (username.length < 3) {
-                    showMessage('registerMessages', 'El nombre de usuario debe tener al menos 3 caracteres.');
-                    return;
-                }
-
-                if (password.length < 6) {
-                    showMessage('registerMessages', 'La contraseña debe tener al menos 6 caracteres.');
-                    return;
-                }
-
-                if (password !== confirmPassword) {
-                    showMessage('registerMessages', 'Las contraseñas no coinciden.');
-                    return;
-                }
-
-                if (db.findUser(username)) {
-                    showMessage('registerMessages', 'Este nombre de usuario ya está en uso.');
-                    return;    <!-- Sobre mí Section -->
-    <section id="sobre-mi" class="section"><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Héctor Web Oficial</title>
+    <title>Web by zXhyper</title>
     <style>
         * {
             margin: 0;
@@ -365,6 +172,28 @@
             transform: scale(1.05);
         }
 
+        /* Quick Access */
+        .quick-access {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .quick-btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #ffd700, #ffb347);
+            color: #000;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .quick-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+        }
+
         /* Sobre mí */
         .about-content {
             display: grid;
@@ -398,6 +227,56 @@
             border-radius: 20px;
             font-size: 0.9rem;
             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Leaderboard Styles */
+        .leaderboard-section {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #ffd700;
+            margin-top: 40px;
+        }
+
+        .leaderboard-title {
+            text-align: center;
+            color: #ffd700;
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .leaderboard-table th,
+        .leaderboard-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .leaderboard-table th {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .leaderboard-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .rank-1 { color: #ffd700; font-weight: bold; }
+        .rank-2 { color: #c0c0c0; font-weight: bold; }
+        .rank-3 { color: #cd7f32; font-weight: bold; }
+
+        .no-scores {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+            padding: 20px;
         }
 
         /* Auth Forms */
@@ -604,24 +483,23 @@
             gap: 10px;
         }
 
-        .save-btn {
-            background: #4ecdc4;
-            color: white;
-            border: none;
+        .save-btn, .cancel-btn {
             padding: 8px 15px;
+            border: none;
             border-radius: 15px;
             cursor: pointer;
             font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn {
+            background: #4ecdc4;
+            color: white;
         }
 
         .cancel-btn {
             background: #ff6b6b;
             color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 12px;
         }
 
         .logout-btn {
@@ -640,56 +518,6 @@
 
         .logout-btn:hover {
             background: #ff5252;
-        }
-
-        /* Leaderboard Styles */
-        .leaderboard-section {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 30px;
-            border-radius: 15px;
-            border: 2px solid #ffd700;
-            margin-top: 40px;
-        }
-
-        .leaderboard-title {
-            text-align: center;
-            color: #ffd700;
-            font-size: 24px;
-            margin-bottom: 25px;
-        }
-
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .leaderboard-table th,
-        .leaderboard-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .leaderboard-table th {
-            background: rgba(255, 215, 0, 0.2);
-            color: #ffd700;
-            font-weight: bold;
-        }
-
-        .leaderboard-table tr:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .rank-1 { color: #ffd700; font-weight: bold; }
-        .rank-2 { color: #c0c0c0; font-weight: bold; }
-        .rank-3 { color: #cd7f32; font-weight: bold; }
-
-        .no-scores {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.7);
-            font-style: italic;
-            padding: 20px;
         }
 
         .error-message {
@@ -785,6 +613,7 @@
             <ul class="nav-links">
                 <li><a href="#inicio">Inicio</a></li>
                 <li><a href="#juegos">Juegos</a></li>
+                <li><a href="#clasificacion">Clasificación</a></li>
                 <li><a href="#proyectos">Proyectos</a></li>
                 <li><a href="#sobre-mi">Sobre mí</a></li>
                 <li><a href="#cuenta">Login | Register</a></li>
@@ -800,7 +629,7 @@
     <!-- Hero Section -->
     <section id="inicio" class="hero">
         <div class="hero-content">
-            <h1>¡Hola! Soy Héctor</h1>
+            <h1>¡Hola! Soy zXhyper</h1>
             <p>Estoy aprendiendo a hacer juegos html y webs 😁</p>
             <a href="#proyectos" class="cta-button">Ver mis proyectos</a>
         </div>
@@ -813,7 +642,7 @@
             <div class="project-card">
                 <span class="project-icon">🧩</span>
                 <h3>Piece Fall</h3>
-                <p>Un juego inspirado en Tetris pero aún mejor. ¡Pronto tabla de clasificación de los mejores en el juego!</p>
+                <p>Un juego inspirado en Tetris pero aún mejor. ¡Compite por el primer puesto en la tabla de clasificación!</p>
                 <a href="piece-fall/" class="project-link">Jugar Ahora</a>
             </div>
             <div class="project-card">
@@ -822,6 +651,34 @@
                 <p>Más juegos increíbles están en desarrollo. ¡Mantente atento para más!</p>
                 <a href="#" class="project-link" style="opacity: 0.5;">Próximamente</a>
             </div>
+        </div>
+        <div class="quick-access">
+            <a href="#clasificacion" class="quick-btn">🏆 Ver Tabla de Clasificación</a>
+        </div>
+    </section>
+
+    <!-- Clasificación Section -->
+    <section id="clasificacion" class="section">
+        <h2>🏆 Tabla de Clasificación</h2>
+        <div class="leaderboard-section">
+            <h3 class="leaderboard-title">🧩 Piece Fall - Top 10</h3>
+            <table class="leaderboard-table" id="leaderboardTable">
+                <thead>
+                    <tr>
+                        <th>Puesto</th>
+                        <th>Jugador</th>
+                        <th>Puntuación</th>
+                        <th>Líneas</th>
+                        <th>Nivel</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <tr>
+                        <td colspan="6" class="no-scores">¡Sé el primero en establecer un récord!</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </section>
 
@@ -850,30 +707,8 @@
         </div>
     </section>
 
-    <!-- Leaderboard Section -->
-    <section id="clasificacion" class="section">
-        <h2>🏆 Tabla de Clasificación</h2>
-        <div class="leaderboard-section">
-            <h3 class="leaderboard-title">🧩 Piece Fall - Top 10</h3>
-            <table class="leaderboard-table" id="leaderboardTable">
-                <thead>
-                    <tr>
-                        <th>Puesto</th>
-                        <th>Jugador</th>
-                        <th>Puntuación</th>
-                        <th>Líneas</th>
-                        <th>Nivel</th>
-                        <th>Fecha</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboardBody">
-                    <tr>
-                        <td colspan="6" class="no-scores">¡Sé el primero en establecer un récord!</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
+    <!-- Sobre mí Section -->
+    <section id="sobre-mi" class="section">
         <h2>👨‍💻 Sobre mí</h2>
         <div class="about-content">
             <div class="profile-image">
@@ -1050,18 +885,65 @@
     </footer>
 
     <script>
-        // Base de datos simulada en memoria
-        class UserDatabase {
+        // Simulador de base de datos persistente
+        class PersistentDatabase {
             constructor() {
-                this.users = [];
-                this.currentUser = null;
-                this.leaderboard = [];
-                // Usuarios de prueba
-                this.addUser('admin', 'admin@test.com', this.hashPassword('admin123'));
-                this.addUser('demo', 'demo@test.com', this.hashPassword('demo123'));
-                // Puntuaciones de ejemplo
-                this.addScore('admin', 15000, 50, 5);
-                this.addScore('demo', 12000, 45, 4);
+                // Simular una base de datos con estado persistente durante la sesión
+                if (!window.gameDatabase) {
+                    window.gameDatabase = {
+                        users: new Map(),
+                        leaderboard: [],
+                        currentSession: null,
+                        initialized: false
+                    };
+                    this.initializeDefaultData();
+                }
+                this.data = window.gameDatabase;
+            }
+
+            initializeDefaultData() {
+                // Datos iniciales que simularían estar en una base de datos real
+                const defaultUsers = [
+                    { username: 'admin', email: 'admin@test.com', password: 'admin123' },
+                    { username: 'demo', email: 'demo@test.com', password: 'demo123' },
+                    { username: 'ProGamer', email: 'pro@game.com', password: 'game123' },
+                    { username: 'TetrisMaster', email: 'master@tetris.com', password: 'tetris123' }
+                ];
+
+                defaultUsers.forEach(user => {
+                    const hashedPassword = this.hashPassword(user.password);
+                    const userData = {
+                        id: this.generateId(),
+                        username: user.username,
+                        email: user.email,
+                        password: hashedPassword,
+                        createdAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+                        stats: {
+                            bestScore: Math.floor(Math.random() * 50000),
+                            gamesPlayed: Math.floor(Math.random() * 100),
+                            bestLines: Math.floor(Math.random() * 200)
+                        }
+                    };
+                    this.data.users.set(user.username.toLowerCase(), userData);
+                });
+
+                // Puntuaciones iniciales para la tabla de clasificación
+                const initialScores = [
+                    { username: 'ProGamer', score: 45000, lines: 180, level: 18 },
+                    { username: 'TetrisMaster', score: 38000, lines: 152, level: 15 },
+                    { username: 'admin', score: 25000, lines: 100, level: 10 },
+                    { username: 'demo', score: 18000, lines: 72, level: 7 }
+                ];
+
+                initialScores.forEach(score => {
+                    this.addScore(score.username, score.score, score.lines, score.level);
+                });
+
+                this.data.initialized = true;
+            }
+
+            generateId() {
+                return Date.now().toString(36) + Math.random().toString(36).substr(2);
             }
 
             hashPassword(password) {
@@ -1074,9 +956,12 @@
                 return Math.abs(hash).toString(36);
             }
 
-            addUser(username, email, hashedPassword) {
+            createUser(username, email, password) {
+                const userId = this.generateId();
+                const hashedPassword = this.hashPassword(password);
+                
                 const user = {
-                    id: Date.now() + Math.random(),
+                    id: userId,
                     username,
                     email,
                     password: hashedPassword,
@@ -1087,62 +972,29 @@
                         bestLines: 0
                     }
                 };
-                this.users.push(user);
+
+                this.data.users.set(username.toLowerCase(), user);
                 return user;
             }
 
-            addScore(username, score, lines, level) {
-                const scoreEntry = {
-                    id: Date.now() + Math.random(),
-                    username,
-                    score,
-                    lines,
-                    level,
-                    date: new Date().toLocaleDateString()
-                };
-                
-                this.leaderboard.push(scoreEntry);
-                this.leaderboard.sort((a, b) => b.score - a.score);
-                this.leaderboard = this.leaderboard.slice(0, 10); // Solo top 10
-                
-                // Actualizar estadísticas del usuario
-                const user = this.findUser(username);
-                if (user) {
-                    user.stats.gamesPlayed++;
-                    user.stats.bestScore = Math.max(user.stats.bestScore, score);
-                    user.stats.bestLines = Math.max(user.stats.bestLines, lines);
-                }
-                
-                return scoreEntry;
-            }
-
-            getLeaderboard() {
-                return this.leaderboard;
-            }
-
-            getUserRank(username) {
-                const userBestScore = this.users.find(u => u.username === username)?.stats.bestScore || 0;
-                const position = this.leaderboard.findIndex(entry => 
-                    entry.username === username && entry.score === userBestScore
-                ) + 1;
-                return position || '-';
-            }
-
             findUser(username) {
-                return this.users.find(user => user.username === username);
+                return this.data.users.get(username.toLowerCase());
             }
 
             findUserByEmail(email) {
-                return this.users.find(user => user.email === email);
+                for (let [key, user] of this.data.users) {
+                    if (user.email.toLowerCase() === email.toLowerCase()) {
+                        return user;
+                    }
+                }
+                return null;
             }
 
-            updateUser(userId, updates) {
-                const user = this.users.find(u => u.id === userId);
+            updateUser(username, updates) {
+                const user = this.findUser(username);
                 if (user) {
                     Object.assign(user, updates);
-                    if (this.currentUser && this.currentUser.id === userId) {
-                        this.currentUser = user;
-                    }
+                    this.data.users.set(username.toLowerCase(), user);
                     return user;
                 }
                 return null;
@@ -1151,23 +1003,63 @@
             authenticate(username, password) {
                 const user = this.findUser(username);
                 if (user && user.password === this.hashPassword(password)) {
-                    this.currentUser = user;
+                    this.data.currentSession = user;
                     return user;
                 }
                 return null;
             }
 
-            logout() {
-                this.currentUser = null;
+            getCurrentUser() {
+                return this.data.currentSession;
             }
 
-            isLoggedIn() {
-                return this.currentUser !== null;
+            logout() {
+                this.data.currentSession = null;
+            }
+
+            addScore(username, score, lines, level) {
+                const scoreEntry = {
+                    id: this.generateId(),
+                    username,
+                    score,
+                    lines,
+                    level,
+                    date: new Date().toLocaleDateString()
+                };
+
+                this.data.leaderboard.push(scoreEntry);
+                this.data.leaderboard.sort((a, b) => b.score - a.score);
+                this.data.leaderboard = this.data.leaderboard.slice(0, 10);
+
+                // Actualizar estadísticas del usuario
+                const user = this.findUser(username);
+                if (user) {
+                    user.stats.gamesPlayed++;
+                    user.stats.bestScore = Math.max(user.stats.bestScore, score);
+                    user.stats.bestLines = Math.max(user.stats.bestLines, lines);
+                    this.updateUser(username, user);
+                }
+
+                return scoreEntry;
+            }
+
+            getLeaderboard() {
+                return this.data.leaderboard;
+            }
+
+            getUserRank(username) {
+                const userBestScore = this.findUser(username)?.stats.bestScore || 0;
+                if (userBestScore === 0) return '-';
+                
+                const position = this.data.leaderboard.findIndex(entry => 
+                    entry.username.toLowerCase() === username.toLowerCase() && entry.score === userBestScore
+                ) + 1;
+                return position || '-';
             }
         }
 
-        // Inicializar base de datos
-        const db = new UserDatabase();
+        // Inicializar la base de datos
+        const db = new PersistentDatabase();
 
         // Funciones de utilidad
         function showMessage(containerId, message, type = 'error') {
@@ -1190,6 +1082,12 @@
                 form.classList.remove('active');
             });
             document.getElementById(tabName === 'login' ? 'loginForm' : 'registerForm').classList.add('active');
+        }
+
+        function showAuthForms() {
+            document.getElementById('authTabs').style.display = 'flex';
+            document.getElementById('userPanel').style.display = 'none';
+            switchTab('login');
         }
 
         function showUserPanel(user) {
@@ -1243,16 +1141,16 @@
         // Funciones de edición de perfil
         function editField(field) {
             document.getElementById(`edit${field.charAt(0).toUpperCase() + field.slice(1)}`).classList.add('active');
+            const currentUser = db.getCurrentUser();
             if (field === 'username') {
-                document.getElementById('newUsername').value = db.currentUser.username;
+                document.getElementById('newUsername').value = currentUser.username;
             } else if (field === 'email') {
-                document.getElementById('newEmail').value = db.currentUser.email;
+                document.getElementById('newEmail').value = currentUser.email;
             }
         }
 
         function cancelEdit(field) {
             document.getElementById(`edit${field.charAt(0).toUpperCase() + field.slice(1)}`).classList.remove('active');
-            // Limpiar campos
             if (field === 'password') {
                 document.getElementById('currentPassword').value = '';
                 document.getElementById('newPassword').value = '';
@@ -1261,8 +1159,8 @@
         }
 
         function saveField(field) {
-            const user = db.currentUser;
-            if (!user) return;
+            const currentUser = db.getCurrentUser();
+            if (!currentUser) return;
 
             if (field === 'username') {
                 const newUsername = document.getElementById('newUsername').value.trim();
@@ -1274,12 +1172,17 @@
                     showMessage('profileMessages', 'El nombre de usuario debe tener al menos 3 caracteres.');
                     return;
                 }
-                if (newUsername !== user.username && db.findUser(newUsername)) {
+                if (newUsername.toLowerCase() !== currentUser.username.toLowerCase() && db.findUser(newUsername)) {
                     showMessage('profileMessages', 'Este nombre de usuario ya está en uso.');
                     return;
                 }
                 
-                db.updateUser(user.id, { username: newUsername });
+                // Actualizar en la base de datos
+                db.data.users.delete(currentUser.username.toLowerCase());
+                const updatedUser = { ...currentUser, username: newUsername };
+                db.data.users.set(newUsername.toLowerCase(), updatedUser);
+                db.data.currentSession = updatedUser;
+                
                 document.getElementById('displayUsername').textContent = newUsername;
                 document.getElementById('welcomeUsername').textContent = newUsername;
                 showMessage('profileMessages', 'Nombre de usuario actualizado exitosamente.', 'success');
@@ -1290,12 +1193,13 @@
                     showMessage('profileMessages', 'El email no puede estar vacío.');
                     return;
                 }
-                if (newEmail !== user.email && db.findUserByEmail(newEmail)) {
+                if (newEmail.toLowerCase() !== currentUser.email.toLowerCase() && db.findUserByEmail(newEmail)) {
                     showMessage('profileMessages', 'Este email ya está registrado.');
                     return;
                 }
                 
-                db.updateUser(user.id, { email: newEmail });
+                const updatedUser = db.updateUser(currentUser.username, { email: newEmail });
+                db.data.currentSession = updatedUser;
                 document.getElementById('displayEmail').textContent = newEmail;
                 showMessage('profileMessages', 'Email actualizado exitosamente.', 'success');
                 
@@ -1309,7 +1213,7 @@
                     return;
                 }
                 
-                if (db.hashPassword(currentPassword) !== user.password) {
+                if (db.hashPassword(currentPassword) !== currentUser.password) {
                     showMessage('profileMessages', 'La contraseña actual es incorrecta.');
                     return;
                 }
@@ -1324,10 +1228,10 @@
                     return;
                 }
                 
-                db.updateUser(user.id, { password: db.hashPassword(newPassword) });
+                const updatedUser = db.updateUser(currentUser.username, { password: db.hashPassword(newPassword) });
+                db.data.currentSession = updatedUser;
                 showMessage('profileMessages', 'Contraseña actualizada exitosamente.', 'success');
                 
-                // Limpiar campos
                 document.getElementById('currentPassword').value = '';
                 document.getElementById('newPassword').value = '';
                 document.getElementById('confirmNewPassword').value = '';
@@ -1338,23 +1242,31 @@
 
         // API para que el juego pueda enviar puntuaciones
         window.submitScore = function(score, lines, level) {
-            if (db.isLoggedIn()) {
-                db.addScore(db.currentUser.username, score, lines, level);
-                showUserPanel(db.currentUser); // Actualizar estadísticas
+            const currentUser = db.getCurrentUser();
+            if (currentUser) {
+                db.addScore(currentUser.username, score, lines, level);
+                showUserPanel(currentUser);
                 return true;
             }
             return false;
         };
 
-        function showAuthForms() {
-            document.getElementById('authTabs').style.display = 'flex';
-            document.getElementById('userPanel').style.display = 'none';
-            switchTab('login');
-        }
-
         // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
-            // Tabs switching
+            // Profile tabs switching
+            document.querySelectorAll('.profile-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.profile-content').forEach(c => c.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    const tabName = this.dataset.profileTab;
+                    const contentId = 'profile' + tabName.charAt(0).toUpperCase() + tabName.slice(1);
+                    document.getElementById(contentId).classList.add('active');
+                });
+            });
+
+            // Auth tabs switching
             document.querySelectorAll('.auth-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     switchTab(this.dataset.tab);
@@ -1421,7 +1333,7 @@
                     return;
                 }
 
-                const newUser = db.addUser(username, email, db.hashPassword(password));
+                const newUser = db.createUser(username, email, password);
                 showMessage('registerMessages', '¡Registro exitoso! Puedes iniciar sesión ahora.', 'success');
                 
                 this.reset();
@@ -1437,6 +1349,14 @@
                 document.getElementById('loginForm').reset();
                 document.getElementById('registerForm').reset();
             });
+
+            // Verificar si hay sesión activa y inicializar leaderboard
+            const currentUser = db.getCurrentUser();
+            if (currentUser) {
+                showUserPanel(currentUser);
+            } else {
+                updateLeaderboard();
+            }
         });
 
         // Smooth scrolling
