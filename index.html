@@ -1,4 +1,197 @@
-<!DOCTYPE html>
+// Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(0, 0, 0, 0.95)';
+            } else {
+                header.style.background = 'rgba(0, 0, 0, 0.9)';
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Profile tabs switching
+            document.querySelectorAll('.profile-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and content
+                    document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.profile-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    document.getElementById('profile' + this.dataset.profileTab.charAt(0).toUpperCase() + this.dataset.profileTab.slice(1)).classList.add('active');
+                });
+            });
+
+            // Auth tabs switching
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('loginUsername').value.trim();
+                const password = document.getElementById('loginPassword').value;
+
+                if (!username || !password) {
+                    showMessage('loginMessages', 'Por favor, completa todos los campos.');
+                }
+
+                if (db.findUserByEmail(email)) {
+                    showMessage('registerMessages', 'Este email ya está registrado.');
+                    return;
+                }
+
+                const newUser = db.addUser(username, email, db.hashPassword(password));
+                showMessage('registerMessages', 'Registro exitoso! Puedes iniciar sesión ahora.', 'success');
+                
+                this.reset();
+                setTimeout(() => {
+                    switchTab('login');
+                }, 2000);
+            });
+
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                db.logout();
+                showAuthForms();
+                document.getElementById('loginForm').reset();
+                document.getElementById('registerForm').reset();
+            });
+
+            // Initialize leaderboard on page load
+            updateLeaderboard();
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(0, 0, 0, 0.95)';
+            } else {
+                header.style.background = 'rgba(0, 0, 0, 0.9)';
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+                }
+
+                const user = db.authenticate(username, password);
+                if (user) {
+                    showMessage('loginMessages', 'Inicio de sesión exitoso!', 'success');
+                    setTimeout(() => {
+                        showUserPanel(user);
+                    }, 1500);
+                } else {
+                    showMessage('loginMessages', 'Usuario o contraseña incorrectos.');
+                }
+            });
+
+            // Register form
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('regUsername').value.trim();
+                const email = document.getElementById('regEmail').value.trim();
+                const password = document.getElementById('regPassword').value;
+                const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+                if (!username || !email || !password || !confirmPassword) {
+                    showMessage('registerMessages', 'Por favor, completa todos los campos.');
+                    return;
+                }
+
+                if (username.length < 3) {
+                    showMessage('registerMessages', 'El nombre de usuario debe tener al menos 3 caracteres.');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    showMessage('registerMessages', 'La contraseña debe tener al menos 6 caracteres.');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    showMessage('registerMessages', 'Las contraseñas no coinciden.');
+                    return;
+                }
+
+                if (db.findUser(username)) {
+                    showMessage('registerMessages', 'Este nombre de usuario ya está en uso.');
+                    return;    <!-- Sobre mí Section -->
+    <section id="sobre-mi" class="section"><!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -207,10 +400,47 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Contacto */
-        .contact-form {
-            max-width: 600px;
+        /* Auth Forms */
+        .auth-container {
+            max-width: 500px;
             margin: 0 auto;
+            position: relative;
+        }
+
+        .auth-form {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .auth-tab.active {
+            background: #ffd700;
+            color: #000;
         }
 
         .form-group {
@@ -221,21 +451,27 @@
             display: block;
             margin-bottom: 8px;
             color: #ffd700;
+            font-weight: bold;
         }
 
-        .form-group input,
-        .form-group textarea {
+        .form-group input {
             width: 100%;
             padding: 15px;
-            border: none;
+            border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             background: rgba(255, 255, 255, 0.1);
             color: white;
             font-size: 16px;
+            transition: all 0.3s ease;
         }
 
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
+        .form-group input:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .form-group input::placeholder {
             color: rgba(255, 255, 255, 0.7);
         }
 
@@ -247,6 +483,7 @@
             border: none;
             border-radius: 10px;
             font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -254,6 +491,225 @@
         .submit-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .user-profile {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid #4ecdc4;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-header h3 {
+            color: #ffd700;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .profile-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px;
+        }
+
+        .profile-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .profile-tab.active {
+            background: #ffd700;
+            color: #000;
+        }
+
+        .profile-content {
+            display: none;
+        }
+
+        .profile-content.active {
+            display: block;
+        }
+
+        .profile-info {
+            display: grid;
+            gap: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .edit-btn {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn:hover {
+            background: #45b7b8;
+        }
+
+        .edit-form {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .edit-form.active {
+            display: block;
+        }
+
+        .edit-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .edit-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .save-btn {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .cancel-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .logout-btn {
+            background: #ff6b6b;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .logout-btn:hover {
+            background: #ff5252;
+        }
+
+        /* Leaderboard Styles */
+        .leaderboard-section {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #ffd700;
+            margin-top: 40px;
+        }
+
+        .leaderboard-title {
+            text-align: center;
+            color: #ffd700;
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .leaderboard-table th,
+        .leaderboard-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .leaderboard-table th {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .leaderboard-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .rank-1 { color: #ffd700; font-weight: bold; }
+        .rank-2 { color: #c0c0c0; font-weight: bold; }
+        .rank-3 { color: #cd7f32; font-weight: bold; }
+
+        .no-scores {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+            padding: 20px;
+        }
+
+        .error-message {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ff6b6b;
+            text-align: center;
+        }
+
+        .success-message {
+            background: rgba(78, 205, 196, 0.2);
+            color: #4ecdc4;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #4ecdc4;
+            text-align: center;
         }
 
         /* Footer */
@@ -314,6 +770,10 @@
                 height: 200px;
                 font-size: 4rem;
             }
+
+            .auth-form {
+                padding: 30px 20px;
+            }
         }
     </style>
 </head>
@@ -327,7 +787,7 @@
                 <li><a href="#juegos">Juegos</a></li>
                 <li><a href="#proyectos">Proyectos</a></li>
                 <li><a href="#sobre-mi">Sobre mí</a></li>
-                <li><a href="#contacto">Contacto</a></li>
+                <li><a href="#cuenta">Login | Register</a></li>
             </ul>
             <div class="mobile-menu">
                 <span></span>
@@ -340,8 +800,8 @@
     <!-- Hero Section -->
     <section id="inicio" class="hero">
         <div class="hero-content">
-            <h1>¡Hola! Soy Dasfik</h1>
-            <p>Desarrollador web y creador de experiencias digitales</p>
+            <h1>¡Hola! Soy Héctor</h1>
+            <p>Estoy aprendiendo a hacer juegos html y webs 😁</p>
             <a href="#proyectos" class="cta-button">Ver mis proyectos</a>
         </div>
     </section>
@@ -353,13 +813,13 @@
             <div class="project-card">
                 <span class="project-icon">🧩</span>
                 <h3>Piece Fall</h3>
-                <p>Un juego inspirado en Tetris con gráficos modernos y controles fluidos. ¡Completa líneas y alcanza la puntuación más alta!</p>
+                <p>Un juego inspirado en Tetris pero aún mejor. ¡Pronto tabla de clasificación de los mejores en el juego!</p>
                 <a href="piece-fall/" class="project-link">Jugar Ahora</a>
             </div>
             <div class="project-card">
                 <span class="project-icon">🎯</span>
                 <h3>Próximamente...</h3>
-                <p>Más juegos increíbles están en desarrollo. ¡Mantente atento para nuevas aventuras!</p>
+                <p>Más juegos increíbles están en desarrollo. ¡Mantente atento para más!</p>
                 <a href="#" class="project-link" style="opacity: 0.5;">Próximamente</a>
             </div>
         </div>
@@ -390,8 +850,30 @@
         </div>
     </section>
 
-    <!-- Sobre mí Section -->
-    <section id="sobre-mi" class="section">
+    <!-- Leaderboard Section -->
+    <section id="clasificacion" class="section">
+        <h2>🏆 Tabla de Clasificación</h2>
+        <div class="leaderboard-section">
+            <h3 class="leaderboard-title">🧩 Piece Fall - Top 10</h3>
+            <table class="leaderboard-table" id="leaderboardTable">
+                <thead>
+                    <tr>
+                        <th>Puesto</th>
+                        <th>Jugador</th>
+                        <th>Puntuación</th>
+                        <th>Líneas</th>
+                        <th>Nivel</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <tr>
+                        <td colspan="6" class="no-scores">¡Sé el primero en establecer un récord!</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
         <h2>👨‍💻 Sobre mí</h2>
         <div class="about-content">
             <div class="profile-image">
@@ -415,25 +897,149 @@
         </div>
     </section>
 
-    <!-- Contacto Section -->
-    <section id="contacto" class="section">
-        <h2>📬 Contacto</h2>
-        <div class="contact-form">
-            <form>
+    <!-- Login | Register Section -->
+    <section id="cuenta" class="section">
+        <h2>🔐 Login | Register</h2>
+        <div class="auth-container" id="authContainer">
+            <!-- Tabs de Login/Registro -->
+            <div class="auth-tabs" id="authTabs">
+                <div class="auth-tab active" data-tab="login">Login</div>
+                <div class="auth-tab" data-tab="register">Register</div>
+            </div>
+
+            <!-- Formulario de Login -->
+            <form class="auth-form active" id="loginForm">
+                <div id="loginMessages"></div>
                 <div class="form-group">
-                    <label for="nombre">Nombre</label>
-                    <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+                    <label for="loginUsername">Usuario</label>
+                    <input type="text" id="loginUsername" name="username" placeholder="Tu nombre de usuario" required>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+                    <label for="loginPassword">Contraseña</label>
+                    <input type="password" id="loginPassword" name="password" placeholder="Tu contraseña" required>
                 </div>
-                <div class="form-group">
-                    <label for="mensaje">Mensaje</label>
-                    <textarea id="mensaje" name="mensaje" rows="5" placeholder="¡Hola! Me gustaría contactar contigo..." required></textarea>
-                </div>
-                <button type="submit" class="submit-btn">Enviar Mensaje</button>
+                <button type="submit" class="submit-btn">Iniciar Sesión</button>
             </form>
+
+            <!-- Formulario de Registro -->
+            <form class="auth-form" id="registerForm">
+                <div id="registerMessages"></div>
+                <div class="form-group">
+                    <label for="regUsername">Usuario</label>
+                    <input type="text" id="regUsername" name="username" placeholder="Elige un nombre de usuario" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email</label>
+                    <input type="email" id="regEmail" name="email" placeholder="tu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Contraseña</label>
+                    <input type="password" id="regPassword" name="password" placeholder="Elige una contraseña segura" required>
+                </div>
+                <div class="form-group">
+                    <label for="regConfirmPassword">Confirmar Contraseña</label>
+                    <input type="password" id="regConfirmPassword" name="confirmPassword" placeholder="Confirma tu contraseña" required>
+                </div>
+                <button type="submit" class="submit-btn">Registrarse</button>
+            </form>
+
+            <!-- Panel de Usuario Logueado -->
+            <div class="user-profile" id="userPanel" style="display: none;">
+                <div class="profile-header">
+                    <h3>👤 Mi Perfil</h3>
+                    <p>Bienvenido, <strong><span id="welcomeUsername"></span></strong></p>
+                </div>
+
+                <!-- Tabs del perfil -->
+                <div class="profile-tabs">
+                    <div class="profile-tab active" data-profile-tab="info">Mi Información</div>
+                    <div class="profile-tab" data-profile-tab="stats">Mis Estadísticas</div>
+                </div>
+
+                <!-- Contenido: Mi Información -->
+                <div class="profile-content active" id="profileInfo">
+                    <div class="profile-info">
+                        <div class="info-item">
+                            <div>
+                                <span class="info-label">Usuario:</span>
+                                <span id="displayUsername"></span>
+                            </div>
+                            <button class="edit-btn" onclick="editField('username')">Editar</button>
+                            <div class="edit-form" id="editUsername">
+                                <input type="text" class="edit-input" id="newUsername" placeholder="Nuevo nombre de usuario">
+                                <div class="edit-actions">
+                                    <button class="save-btn" onclick="saveField('username')">Guardar</button>
+                                    <button class="cancel-btn" onclick="cancelEdit('username')">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div>
+                                <span class="info-label">Email:</span>
+                                <span id="displayEmail"></span>
+                            </div>
+                            <button class="edit-btn" onclick="editField('email')">Editar</button>
+                            <div class="edit-form" id="editEmail">
+                                <input type="email" class="edit-input" id="newEmail" placeholder="Nuevo email">
+                                <div class="edit-actions">
+                                    <button class="save-btn" onclick="saveField('email')">Guardar</button>
+                                    <button class="cancel-btn" onclick="cancelEdit('email')">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div>
+                                <span class="info-label">Contraseña:</span>
+                                <span>••••••••</span>
+                            </div>
+                            <button class="edit-btn" onclick="editField('password')">Cambiar</button>
+                            <div class="edit-form" id="editPassword">
+                                <input type="password" class="edit-input" id="currentPassword" placeholder="Contraseña actual">
+                                <input type="password" class="edit-input" id="newPassword" placeholder="Nueva contraseña">
+                                <input type="password" class="edit-input" id="confirmNewPassword" placeholder="Confirmar nueva contraseña">
+                                <div class="edit-actions">
+                                    <button class="save-btn" onclick="saveField('password')">Guardar</button>
+                                    <button class="cancel-btn" onclick="cancelEdit('password')">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div>
+                                <span class="info-label">Fecha de registro:</span>
+                                <span id="displayDate"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenido: Mis Estadísticas -->
+                <div class="profile-content" id="profileStats">
+                    <div class="profile-info">
+                        <div class="info-item">
+                            <span class="info-label">🧩 Piece Fall - Mejor Puntuación:</span>
+                            <span id="bestScore">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">📊 Partidas Jugadas:</span>
+                            <span id="gamesPlayed">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">🔥 Mejor Racha de Líneas:</span>
+                            <span id="bestLines">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">🏆 Posición en Ranking:</span>
+                            <span id="userRank">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="profileMessages"></div>
+                <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
+            </div>
         </div>
     </section>
 
@@ -444,6 +1050,395 @@
     </footer>
 
     <script>
+        // Base de datos simulada en memoria
+        class UserDatabase {
+            constructor() {
+                this.users = [];
+                this.currentUser = null;
+                this.leaderboard = [];
+                // Usuarios de prueba
+                this.addUser('admin', 'admin@test.com', this.hashPassword('admin123'));
+                this.addUser('demo', 'demo@test.com', this.hashPassword('demo123'));
+                // Puntuaciones de ejemplo
+                this.addScore('admin', 15000, 50, 5);
+                this.addScore('demo', 12000, 45, 4);
+            }
+
+            hashPassword(password) {
+                let hash = 0;
+                for (let i = 0; i < password.length; i++) {
+                    const char = password.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash;
+                }
+                return Math.abs(hash).toString(36);
+            }
+
+            addUser(username, email, hashedPassword) {
+                const user = {
+                    id: Date.now() + Math.random(),
+                    username,
+                    email,
+                    password: hashedPassword,
+                    createdAt: new Date().toLocaleDateString(),
+                    stats: {
+                        bestScore: 0,
+                        gamesPlayed: 0,
+                        bestLines: 0
+                    }
+                };
+                this.users.push(user);
+                return user;
+            }
+
+            addScore(username, score, lines, level) {
+                const scoreEntry = {
+                    id: Date.now() + Math.random(),
+                    username,
+                    score,
+                    lines,
+                    level,
+                    date: new Date().toLocaleDateString()
+                };
+                
+                this.leaderboard.push(scoreEntry);
+                this.leaderboard.sort((a, b) => b.score - a.score);
+                this.leaderboard = this.leaderboard.slice(0, 10); // Solo top 10
+                
+                // Actualizar estadísticas del usuario
+                const user = this.findUser(username);
+                if (user) {
+                    user.stats.gamesPlayed++;
+                    user.stats.bestScore = Math.max(user.stats.bestScore, score);
+                    user.stats.bestLines = Math.max(user.stats.bestLines, lines);
+                }
+                
+                return scoreEntry;
+            }
+
+            getLeaderboard() {
+                return this.leaderboard;
+            }
+
+            getUserRank(username) {
+                const userBestScore = this.users.find(u => u.username === username)?.stats.bestScore || 0;
+                const position = this.leaderboard.findIndex(entry => 
+                    entry.username === username && entry.score === userBestScore
+                ) + 1;
+                return position || '-';
+            }
+
+            findUser(username) {
+                return this.users.find(user => user.username === username);
+            }
+
+            findUserByEmail(email) {
+                return this.users.find(user => user.email === email);
+            }
+
+            updateUser(userId, updates) {
+                const user = this.users.find(u => u.id === userId);
+                if (user) {
+                    Object.assign(user, updates);
+                    if (this.currentUser && this.currentUser.id === userId) {
+                        this.currentUser = user;
+                    }
+                    return user;
+                }
+                return null;
+            }
+
+            authenticate(username, password) {
+                const user = this.findUser(username);
+                if (user && user.password === this.hashPassword(password)) {
+                    this.currentUser = user;
+                    return user;
+                }
+                return null;
+            }
+
+            logout() {
+                this.currentUser = null;
+            }
+
+            isLoggedIn() {
+                return this.currentUser !== null;
+            }
+        }
+
+        // Inicializar base de datos
+        const db = new UserDatabase();
+
+        // Funciones de utilidad
+        function showMessage(containerId, message, type = 'error') {
+            const container = document.getElementById(containerId);
+            const messageClass = type === 'error' ? 'error-message' : 'success-message';
+            container.innerHTML = `<div class="${messageClass}">${message}</div>`;
+            
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+            document.querySelectorAll('.auth-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            document.getElementById(tabName === 'login' ? 'loginForm' : 'registerForm').classList.add('active');
+        }
+
+        function showUserPanel(user) {
+            document.getElementById('authTabs').style.display = 'none';
+            document.querySelectorAll('.auth-form').forEach(form => {
+                form.style.display = 'none';
+            });
+            
+            // Actualizar información del perfil
+            document.getElementById('welcomeUsername').textContent = user.username;
+            document.getElementById('displayUsername').textContent = user.username;
+            document.getElementById('displayEmail').textContent = user.email;
+            document.getElementById('displayDate').textContent = user.createdAt;
+            
+            // Actualizar estadísticas
+            document.getElementById('bestScore').textContent = user.stats.bestScore.toLocaleString();
+            document.getElementById('gamesPlayed').textContent = user.stats.gamesPlayed;
+            document.getElementById('bestLines').textContent = user.stats.bestLines;
+            document.getElementById('userRank').textContent = db.getUserRank(user.username);
+            
+            document.getElementById('userPanel').style.display = 'block';
+            updateLeaderboard();
+        }
+
+        function updateLeaderboard() {
+            const leaderboard = db.getLeaderboard();
+            const tbody = document.getElementById('leaderboardBody');
+            
+            if (leaderboard.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="no-scores">¡Sé el primero en establecer un récord!</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = '';
+            leaderboard.forEach((entry, index) => {
+                const row = document.createElement('tr');
+                const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '';
+                
+                row.innerHTML = `
+                    <td class="${rankClass}">${index + 1}</td>
+                    <td class="${rankClass}">${entry.username}</td>
+                    <td class="${rankClass}">${entry.score.toLocaleString()}</td>
+                    <td>${entry.lines}</td>
+                    <td>${entry.level}</td>
+                    <td>${entry.date}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Funciones de edición de perfil
+        function editField(field) {
+            document.getElementById(`edit${field.charAt(0).toUpperCase() + field.slice(1)}`).classList.add('active');
+            if (field === 'username') {
+                document.getElementById('newUsername').value = db.currentUser.username;
+            } else if (field === 'email') {
+                document.getElementById('newEmail').value = db.currentUser.email;
+            }
+        }
+
+        function cancelEdit(field) {
+            document.getElementById(`edit${field.charAt(0).toUpperCase() + field.slice(1)}`).classList.remove('active');
+            // Limpiar campos
+            if (field === 'password') {
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmNewPassword').value = '';
+            }
+        }
+
+        function saveField(field) {
+            const user = db.currentUser;
+            if (!user) return;
+
+            if (field === 'username') {
+                const newUsername = document.getElementById('newUsername').value.trim();
+                if (!newUsername) {
+                    showMessage('profileMessages', 'El nombre de usuario no puede estar vacío.');
+                    return;
+                }
+                if (newUsername.length < 3) {
+                    showMessage('profileMessages', 'El nombre de usuario debe tener al menos 3 caracteres.');
+                    return;
+                }
+                if (newUsername !== user.username && db.findUser(newUsername)) {
+                    showMessage('profileMessages', 'Este nombre de usuario ya está en uso.');
+                    return;
+                }
+                
+                db.updateUser(user.id, { username: newUsername });
+                document.getElementById('displayUsername').textContent = newUsername;
+                document.getElementById('welcomeUsername').textContent = newUsername;
+                showMessage('profileMessages', 'Nombre de usuario actualizado exitosamente.', 'success');
+                
+            } else if (field === 'email') {
+                const newEmail = document.getElementById('newEmail').value.trim();
+                if (!newEmail) {
+                    showMessage('profileMessages', 'El email no puede estar vacío.');
+                    return;
+                }
+                if (newEmail !== user.email && db.findUserByEmail(newEmail)) {
+                    showMessage('profileMessages', 'Este email ya está registrado.');
+                    return;
+                }
+                
+                db.updateUser(user.id, { email: newEmail });
+                document.getElementById('displayEmail').textContent = newEmail;
+                showMessage('profileMessages', 'Email actualizado exitosamente.', 'success');
+                
+            } else if (field === 'password') {
+                const currentPassword = document.getElementById('currentPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmNewPassword').value;
+                
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                    showMessage('profileMessages', 'Por favor, completa todos los campos.');
+                    return;
+                }
+                
+                if (db.hashPassword(currentPassword) !== user.password) {
+                    showMessage('profileMessages', 'La contraseña actual es incorrecta.');
+                    return;
+                }
+                
+                if (newPassword.length < 6) {
+                    showMessage('profileMessages', 'La nueva contraseña debe tener al menos 6 caracteres.');
+                    return;
+                }
+                
+                if (newPassword !== confirmPassword) {
+                    showMessage('profileMessages', 'Las contraseñas no coinciden.');
+                    return;
+                }
+                
+                db.updateUser(user.id, { password: db.hashPassword(newPassword) });
+                showMessage('profileMessages', 'Contraseña actualizada exitosamente.', 'success');
+                
+                // Limpiar campos
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmNewPassword').value = '';
+            }
+            
+            cancelEdit(field);
+        }
+
+        // API para que el juego pueda enviar puntuaciones
+        window.submitScore = function(score, lines, level) {
+            if (db.isLoggedIn()) {
+                db.addScore(db.currentUser.username, score, lines, level);
+                showUserPanel(db.currentUser); // Actualizar estadísticas
+                return true;
+            }
+            return false;
+        };
+
+        function showAuthForms() {
+            document.getElementById('authTabs').style.display = 'flex';
+            document.getElementById('userPanel').style.display = 'none';
+            switchTab('login');
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tabs switching
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('loginUsername').value.trim();
+                const password = document.getElementById('loginPassword').value;
+
+                if (!username || !password) {
+                    showMessage('loginMessages', 'Por favor, completa todos los campos.');
+                    return;
+                }
+
+                const user = db.authenticate(username, password);
+                if (user) {
+                    showMessage('loginMessages', '¡Inicio de sesión exitoso!', 'success');
+                    setTimeout(() => {
+                        showUserPanel(user);
+                    }, 1500);
+                } else {
+                    showMessage('loginMessages', 'Usuario o contraseña incorrectos.');
+                }
+            });
+
+            // Register form
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('regUsername').value.trim();
+                const email = document.getElementById('regEmail').value.trim();
+                const password = document.getElementById('regPassword').value;
+                const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+                if (!username || !email || !password || !confirmPassword) {
+                    showMessage('registerMessages', 'Por favor, completa todos los campos.');
+                    return;
+                }
+
+                if (username.length < 3) {
+                    showMessage('registerMessages', 'El nombre de usuario debe tener al menos 3 caracteres.');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    showMessage('registerMessages', 'La contraseña debe tener al menos 6 caracteres.');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    showMessage('registerMessages', 'Las contraseñas no coinciden.');
+                    return;
+                }
+
+                if (db.findUser(username)) {
+                    showMessage('registerMessages', 'Este nombre de usuario ya está en uso.');
+                    return;
+                }
+
+                if (db.findUserByEmail(email)) {
+                    showMessage('registerMessages', 'Este email ya está registrado.');
+                    return;
+                }
+
+                const newUser = db.addUser(username, email, db.hashPassword(password));
+                showMessage('registerMessages', '¡Registro exitoso! Puedes iniciar sesión ahora.', 'success');
+                
+                this.reset();
+                setTimeout(() => {
+                    switchTab('login');
+                }, 2000);
+            });
+
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                db.logout();
+                showAuthForms();
+                document.getElementById('loginForm').reset();
+                document.getElementById('registerForm').reset();
+            });
+        });
+
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -466,13 +1461,6 @@
             } else {
                 header.style.background = 'rgba(0, 0, 0, 0.9)';
             }
-        });
-
-        // Form submission
-        document.querySelector('form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('¡Mensaje enviado! Gracias por contactarme.');
-            e.target.reset();
         });
 
         // Intersection Observer for animations
