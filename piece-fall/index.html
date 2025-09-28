@@ -522,17 +522,17 @@
             }
             
             showGameOver() {
-                const gameOverDiv = document.createElement('div');
-                gameOverDiv.className = 'game-over';
-                gameOverDiv.innerHTML = `
-                    <h1>¡JUEGO TERMINADO!</h1>
-                    <p>Puntuación Final: ${this.score}</p>
-                    <p>Líneas Completadas: ${this.lines}</p>
-                    <p>Nivel Alcanzado: ${this.level}</p>
-                    <button class="restart-btn" onclick="location.reload()">JUGAR DE NUEVO</button>
-                `;
-                document.body.appendChild(gameOverDiv);
-            }
+    const gameOverDiv = document.createElement('div');
+    gameOverDiv.className = 'game-over';
+    gameOverDiv.innerHTML = `
+        <h1>¡JUEGO TERMINADO!</h1>
+        <p>Puntuación Final: ${this.score}</p>
+        <p>Líneas Completadas: ${this.lines}</p>
+        <p>Nivel Alcanzado: ${this.level}</p>
+        <button class="restart-btn" onclick="location.reload()">JUGAR DE NUEVO</button>
+    `;
+    document.body.appendChild(gameOverDiv);
+}
             
             setupEventListeners() {
                 document.addEventListener('keydown', (e) => {
