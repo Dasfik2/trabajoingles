@@ -1049,320 +1049,27 @@
         <p>Construido con ❤️ y mucho café</p>
     </footer>
 
-    <script>
-        // Base de datos simulada en memoria
-        class UserDatabase {
-            constructor() {
-                this.users = [];
-                this.currentUser = null;
-                this.leaderboard = [];
-                // Usuarios de prueba
-                this.addUser('admin', 'admin@test.com', this.hashPassword('admin123'));
-                this.addUser('demo', 'demo@test.com', this.hashPassword('demo123'));
-                // Puntuaciones de ejemplo
-                this.addScore('admin', 15000, 50, 5);
-                this.addScore('demo', 12000, 45, 4);
-            }
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Profile tabs switching
+            document.querySelectorAll('.profile-tab').forEach(tab => {
+                tab.addEventListener('click', function () {
+                    document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.profile-content').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    document.getElementById('profile' + this.dataset.profileTab.charAt(0).toUpperCase() + this.dataset.profileTab.slice(1)).classList.add('active');
+                });
+            });
 
-            hashPassword(password) {
-                let hash = 0;
-                for (let i = 0; i < password.length; i++) {
-                    const char = password.charCodeAt(i);
-                    hash = ((hash << 5) - hash) + char;
-                    hash = hash & hash;
-                }
-                return Math.abs(hash).toString(36);
-            }
-
-            addUser(username, email, hashedPassword) {
-                const user = {
-                    id: Date.now() + Math.random(),
-                    username,
-                    email,
-                    password: hashedPassword,
-                    createdAt: new Date().toLocaleDateString(),
-                    stats: {
-                        bestScore: 0,
-                        gamesPlayed: 0,
-                        bestLines: 0
-                    }
-                };
-                this.users.push(user);
-                return user;
-            }
-
-            addScore(username, score, lines, level) {
-                const scoreEntry = {
-                    id: Date.now() + Math.random(),
-                    username,
-                    score,
-                    lines,
-                    level,
-                    date: new Date().toLocaleDateString()
-                };
-                
-                this.leaderboard.push(scoreEntry);
-                this.leaderboard.sort((a, b) => b.score - a.score);
-                this.leaderboard = this.leaderboard.slice(0, 10); // Solo top 10
-                
-                // Actualizar estadísticas del usuario
-                const user = this.findUser(username);
-                if (user) {
-                    user.stats.gamesPlayed++;
-                    user.stats.bestScore = Math.max(user.stats.bestScore, score);
-                    user.stats.bestLines = Math.max(user.stats.bestLines, lines);
-                }
-                
-                return scoreEntry;
-            }
-
-            getLeaderboard() {
-                return this.leaderboard;
-            }
-
-            getUserRank(username) {
-                const userBestScore = this.users.find(u => u.username === username)?.stats.bestScore || 0;
-                const position = this.leaderboard.findIndex(entry => 
-                    entry.username === username && entry.score === userBestScore
-                ) + 1;
-                return position || '-';
-            }
-
-            findUser(username) {
-                return this.users.find(user => user.username === username);
-            }
-
-            findUserByEmail(email) {
-                return this.users.find(user => user.email === email);
-            }
-
-            updateUser(userId, updates) {
-                const user = this.users.find(u => u.id === userId);
-                if (user) {
-                    Object.assign(user, updates);
-                    if (this.currentUser && this.currentUser.id === userId) {
-                        this.currentUser = user;
-                    }
-                    return user;
-                }
-                return null;
-            }
-
-            authenticate(username, password) {
-                const user = this.findUser(username);
-                if (user && user.password === this.hashPassword(password)) {
-                    this.currentUser = user;
-                    return user;
-                }
-                return null;
-            }
-
-            logout() {
-                this.currentUser = null;
-            }
-
-            isLoggedIn() {
-                return this.currentUser !== null;
-            }
-        }
-
-        // Inicializar base de datos
-        const db = new UserDatabase();
-
-        // Funciones de utilidad
-        function showMessage(containerId, message, type = 'error') {
-            const container = document.getElementById(containerId);
-            const messageClass = type === 'error' ? 'error-message' : 'success-message';
-            container.innerHTML = `<div class="${messageClass}">${message}</div>`;
-            
-            setTimeout(() => {
-                container.innerHTML = '';
-            }, 5000);
-        }
-
-        function switchTab(tabName) {
+            // Auth tabs switching
             document.querySelectorAll('.auth-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-
-            document.querySelectorAll('.auth-form').forEach(form => {
-                form.classList.remove('active');
-            });
-            document.getElementById(tabName === 'login' ? 'loginForm' : 'registerForm').classList.add('active');
-        }
-
-        function showUserPanel(user) {
-            document.getElementById('authTabs').style.display = 'none';
-            document.querySelectorAll('.auth-form').forEach(form => {
-                form.style.display = 'none';
-            });
-            
-            // Actualizar información del perfil
-            document.getElementById('welcomeUsername').textContent = user.username;
-            document.getElementById('displayUsername').textContent = user.username;
-            document.getElementById('displayEmail').textContent = user.email;
-            document.getElementById('displayDate').textContent = user.createdAt;
-            
-            // Actualizar estadísticas
-            document.getElementById('bestScore').textContent = user.stats.bestScore.toLocaleString();
-            document.getElementById('gamesPlayed').textContent = user.stats.gamesPlayed;
-            document.getElementById('bestLines').textContent = user.stats.bestLines;
-            document.getElementById('userRank').textContent = db.getUserRank(user.username);
-            
-            document.getElementById('userPanel').style.display = 'block';
-            updateLeaderboard();
-        }
-
-        function updateLeaderboard() {
-            const leaderboard = db.getLeaderboard();
-            const tbody = document.getElementById('leaderboardBody');
-            
-            if (leaderboard.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="no-scores">¡Sé el primero en establecer un récord!</td></tr>';
-                return;
-            }
-            
-            tbody.innerHTML = '';
-            leaderboard.forEach((entry, index) => {
-                const row = document.createElement('tr');
-                const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '';
-                
-                row.innerHTML = `
-                    <td class="${rankClass}">${index + 1}</td>
-                    <td class="${rankClass}">${entry.username}</td>
-                    <td class="${rankClass}">${entry.score.toLocaleString()}</td>
-                    <td>${entry.lines}</td>
-                    <td>${entry.level}</td>
-                    <td>${entry.date}</td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        // Funciones de edición de perfil
-        function editField(field) {
-            document.getElementById(`edit${field.charAt(0).toUpperCase() + field.slice(1)}`).classList.add('active');
-            if (field === 'username') {
-                document.getElementById('newUsername').value = db.currentUser.username;
-            } else if (field === 'email') {
-                document.getElementById('newEmail').value = db.currentUser.email;
-            }
-        }
-
-        function cancelEdit(field) {
-            document.getElementById(`edit${field.charAt(0).toUpperCase() + field.slice(1)}`).classList.remove('active');
-            // Limpiar campos
-            if (field === 'password') {
-                document.getElementById('currentPassword').value = '';
-                document.getElementById('newPassword').value = '';
-                document.getElementById('confirmNewPassword').value = '';
-            }
-        }
-
-        function saveField(field) {
-            const user = db.currentUser;
-            if (!user) return;
-
-            if (field === 'username') {
-                const newUsername = document.getElementById('newUsername').value.trim();
-                if (!newUsername) {
-                    showMessage('profileMessages', 'El nombre de usuario no puede estar vacío.');
-                    return;
-                }
-                if (newUsername.length < 3) {
-                    showMessage('profileMessages', 'El nombre de usuario debe tener al menos 3 caracteres.');
-                    return;
-                }
-                if (newUsername !== user.username && db.findUser(newUsername)) {
-                    showMessage('profileMessages', 'Este nombre de usuario ya está en uso.');
-                    return;
-                }
-                
-                db.updateUser(user.id, { username: newUsername });
-                document.getElementById('displayUsername').textContent = newUsername;
-                document.getElementById('welcomeUsername').textContent = newUsername;
-                showMessage('profileMessages', 'Nombre de usuario actualizado exitosamente.', 'success');
-                
-            } else if (field === 'email') {
-                const newEmail = document.getElementById('newEmail').value.trim();
-                if (!newEmail) {
-                    showMessage('profileMessages', 'El email no puede estar vacío.');
-                    return;
-                }
-                if (newEmail !== user.email && db.findUserByEmail(newEmail)) {
-                    showMessage('profileMessages', 'Este email ya está registrado.');
-                    return;
-                }
-                
-                db.updateUser(user.id, { email: newEmail });
-                document.getElementById('displayEmail').textContent = newEmail;
-                showMessage('profileMessages', 'Email actualizado exitosamente.', 'success');
-                
-            } else if (field === 'password') {
-                const currentPassword = document.getElementById('currentPassword').value;
-                const newPassword = document.getElementById('newPassword').value;
-                const confirmPassword = document.getElementById('confirmNewPassword').value;
-                
-                if (!currentPassword || !newPassword || !confirmPassword) {
-                    showMessage('profileMessages', 'Por favor, completa todos los campos.');
-                    return;
-                }
-                
-                if (db.hashPassword(currentPassword) !== user.password) {
-                    showMessage('profileMessages', 'La contraseña actual es incorrecta.');
-                    return;
-                }
-                
-                if (newPassword.length < 6) {
-                    showMessage('profileMessages', 'La nueva contraseña debe tener al menos 6 caracteres.');
-                    return;
-                }
-                
-                if (newPassword !== confirmPassword) {
-                    showMessage('profileMessages', 'Las contraseñas no coinciden.');
-                    return;
-                }
-                
-                db.updateUser(user.id, { password: db.hashPassword(newPassword) });
-                showMessage('profileMessages', 'Contraseña actualizada exitosamente.', 'success');
-                
-                // Limpiar campos
-                document.getElementById('currentPassword').value = '';
-                document.getElementById('newPassword').value = '';
-                document.getElementById('confirmNewPassword').value = '';
-            }
-            
-            cancelEdit(field);
-        }
-
-        // API para que el juego pueda enviar puntuaciones
-        window.submitScore = function(score, lines, level) {
-            if (db.isLoggedIn()) {
-                db.addScore(db.currentUser.username, score, lines, level);
-                showUserPanel(db.currentUser); // Actualizar estadísticas
-                return true;
-            }
-            return false;
-        };
-
-        function showAuthForms() {
-            document.getElementById('authTabs').style.display = 'flex';
-            document.getElementById('userPanel').style.display = 'none';
-            switchTab('login');
-        }
-
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            // Tabs switching
-            document.querySelectorAll('.auth-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
+                tab.addEventListener('click', function () {
                     switchTab(this.dataset.tab);
                 });
             });
 
             // Login form
-            document.getElementById('loginForm').addEventListener('submit', function(e) {
+            document.getElementById('loginForm').addEventListener('submit', function (e) {
                 e.preventDefault();
                 const username = document.getElementById('loginUsername').value.trim();
                 const password = document.getElementById('loginPassword').value;
@@ -1374,7 +1081,7 @@
 
                 const user = db.authenticate(username, password);
                 if (user) {
-                    showMessage('loginMessages', '¡Inicio de sesión exitoso!', 'success');
+                    showMessage('loginMessages', 'Inicio de sesión exitoso!', 'success');
                     setTimeout(() => {
                         showUserPanel(user);
                     }, 1500);
@@ -1384,7 +1091,7 @@
             });
 
             // Register form
-            document.getElementById('registerForm').addEventListener('submit', function(e) {
+            document.getElementById('registerForm').addEventListener('submit', function (e) {
                 e.preventDefault();
                 const username = document.getElementById('regUsername').value.trim();
                 const email = document.getElementById('regEmail').value.trim();
@@ -1423,7 +1130,7 @@
 
                 const newUser = db.addUser(username, email, db.hashPassword(password));
                 showMessage('registerMessages', '¡Registro exitoso! Puedes iniciar sesión ahora.', 'success');
-                
+
                 this.reset();
                 setTimeout(() => {
                     switchTab('login');
@@ -1431,12 +1138,15 @@
             });
 
             // Logout button
-            document.getElementById('logoutBtn').addEventListener('click', function() {
+            document.getElementById('logoutBtn').addEventListener('click', function () {
                 db.logout();
                 showAuthForms();
                 document.getElementById('loginForm').reset();
                 document.getElementById('registerForm').reset();
             });
+
+            // Initialize leaderboard on page load
+            updateLeaderboard();
         });
 
         // Smooth scrolling
@@ -1478,7 +1188,6 @@
             });
         }, observerOptions);
 
-        // Observe all cards
         document.querySelectorAll('.project-card').forEach(card => {
             card.style.opacity = '0';
             card.style.transform = 'translateY(30px)';
